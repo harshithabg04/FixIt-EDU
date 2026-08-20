@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+    }
+
+    .login-container {
+      background: #1e2a38;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 26px;
+      color: #00d2ff;
+    }
+
+    .login-container input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #2d3f52;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .login-container input:focus {
+      outline: 2px solid #00d2ff;
+      background: #34495e;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 14px;
+      background: #00d2ff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .login-container button:hover {
+      background: #009ec3;
+    }
+
+    .error-msg {
+      color: #ff6b6b;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .success-msg {
+      color: #2ecc71;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <h2>Admin Panel Login</h2>
+    <div id="msgBox"></div>
+    <form id="adminLoginForm">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('adminLoginForm');
+    const msgBox = document.getElementById('msgBox');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      try {
+        const res = await fetch('https://fixit-backend-cccw.onrender.com/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          localStorage.setItem('adminToken', data.token);
+          msgBox.innerHTML = `<div class="success-msg">Login successful! Redirecting...</div>`;
+          setTimeout(() => {
+            window.location.href = 'admin-dashboard.html';
+          }, 1000);
+        } else {
+          msgBox.innerHTML = `<div class="error-msg">${data.message || 'Invalid credentials'}</div>`;
+        }
+      } catch (err) {
+        msgBox.innerHTML = `<div class="error-msg">Server error. Please try again.</div>`;
+        console.error(err);
+      }
+    });
+  </script>
+
+</body>
+</html>

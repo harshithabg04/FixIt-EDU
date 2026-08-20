@@ -1,0 +1,103 @@
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #1e1e1e;
+    font-family: 'Poppins', sans-serif;
+    color: #f0f0f0;
+  }
+
+  header {
+    padding: 1rem 2rem;
+    background-color: #292929;
+    border-bottom: 1px solid #444;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #9f9fff;
+    text-align: center;
+  }
+
+  .dashboard {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+  }
+
+  .summary-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .card {
+    flex: 1 1 250px;
+    background: #2a2a2a;
+    padding: 1.2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(160, 160, 255, 0.15);
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px rgba(160, 160, 255, 0.3);
+  }
+
+  .card h3 {
+    font-size: 2rem;
+    margin: 0;
+    color: #bbbaff;
+  }
+
+  .card p {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    color: #d0d0d0;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #2a2a2a;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(160, 160, 255, 0.1);
+  }
+
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+    color: #e0e0e0;
+  }
+
+  thead {
+    background-color: #383838;
+    color: #bbbaff;
+  }
+
+  tr:hover {
+    background-color: #333333;
+  }
+
+  .status {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .status.pending {
+    background-color: #ffc10733;
+    color: #ffc107;
+  }
+
+  .status.in-progress {
+    background-color: #2196f333;
+    color: #2196f3;
+  }
+
+  .status.resolved {
+    background-color: #4caf5033;
+    color: #4caf50;
+  }

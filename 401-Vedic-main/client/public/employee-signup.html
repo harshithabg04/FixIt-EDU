@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Employee Signup</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.2);
+      width: 400px;
+    }
+
+    h2 {
+      color: #f5a623;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background: #2c2c2c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+    }
+
+    input[type="file"] {
+      background: #1f1f1f;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #f5a623;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #121212;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: #d9971b;
+    }
+
+    p.message {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    p.message a {
+      color: #f5a623;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    p.message a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Employee Signup</h2>
+    <form id="employeeSignupForm" enctype="multipart/form-data">
+      <input type="text" name="username" placeholder="Full Name" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="password" name="password" placeholder="Password" required />
+
+      <select name="professorType" required>
+        <option value="">-- Select Professor Type --</option>
+        <option value="Assistant Professor">Assistant Professor</option>
+        <option value="Associate Professor">Associate Professor</option>
+        <option value="Professor">Professor</option>
+        <option value="Others">Others</option>
+      </select>
+
+      <select name="employeeCategory" required>
+        <option value="">-- Select Category --</option>
+        <option value="Academic">Academic</option>
+        <option value="Non-Academic">Non-Academic</option>
+      </select>
+              <!-- Inside the employee signup form -->
+<select id="department" name="department" required>
+  <option value="">Select Department</option>
+  <option value="CSE">CSE</option>
+  <option value="IT">IT</option>
+  <option value="MECH">MECH</option>
+  <option value="ECE">ECE</option>
+  <option value="EEE">EEE</option>
+  <option value="AIML">AIML</option>
+  <option value="AIDS">AIDS</option>
+  <option value="CSBS">CSBS</option>
+  <option value="CIVIL">CIVIL</option>
+  <option value="OTHERS">OTHERS</option>
+</select>
+      <input type="file" name="collegeIdCard" accept="image/*,.pdf" required />
+      <button type="submit">Get OTP</button>
+
+      <p class="message">
+        Already have an account? <a href="/employee-login.html">Log In</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('employeeSignupForm');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const email = formData.get('email');
+      const proofFile = form.elements['collegeIdCard'].files[0];
+
+      if (!proofFile) {
+        alert("Please upload your College ID Card.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function () {
+        const base64File = reader.result;
+
+        const tempData = Object.fromEntries(formData.entries());
+        tempData.collegeIdCard = base64File;
+        sessionStorage.setItem('signupForm', JSON.stringify(tempData));
+
+        try {
+          const otpRes = await fetch('/api/employee/request-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+
+          const data = await otpRes.json();
+          if (!otpRes.ok) return alert(data.message || 'OTP failed');
+
+          alert('OTP sent to your email.');
+          window.location.href = '/employee-verify-otp.html';
+        } catch (err) {
+          alert('Error sending OTP');
+          console.error(err);
+        }
+      };
+
+      reader.readAsDataURL(proofFile);
+    });
+  </script>
+</body>
+</html>

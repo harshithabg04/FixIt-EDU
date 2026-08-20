@@ -1,0 +1,631 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Welcome | FixIt User</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- AOS CSS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      background: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    nav {
+      background: #1f1f1f;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      font-size: 22px;
+      color: #f5a623;
+    }
+    nav ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+    nav ul li a {
+      color: #ddd;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    nav ul li a:hover {
+      color: #f5a623;
+    }
+    .dashboard-section {
+      padding: 40px 20px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+    .welcome {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .welcome h1 {
+      color: #f5a623;
+      animation: fadeInUp 1s ease-in-out;
+    }
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    .tips {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 165, 0, 0.1);
+      margin-top: 30px;
+    }
+    .tips h3 {
+      color: #f5a623;
+      margin-bottom: 10px;
+    }
+    .tips ul {
+      padding-left: 20px;
+    }
+    .dashboard-options {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .dashboard-options button {
+      background: #f5a623;
+      color: #121212;
+      border: none;
+      padding: 14px 22px;
+      font-size: 16px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .dashboard-options button:hover {
+      box-shadow: 0 0 15px rgba(245, 166, 35, 0.6);
+      background: linear-gradient(135deg, #f5a623, #ffaa00);
+    }
+    .summary {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255, 193, 7, 0.15);
+      margin-top: 40px;
+    }
+    .summary h2 {
+      color: #ffaa00;
+      margin-bottom: 10px;
+    }
+    .summary p {
+      margin: 6px 0;
+      color: #ccc;
+    }
+    .form-section {
+  background: #1e1e1e;
+  padding: 30px;
+  margin: 30px auto;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+  width: 90%;
+  max-width: 600px;
+  display: none;
+  transition: all 0.4s ease;
+}
+.form-section h3 {
+  color: #f5a623;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+.form-section input,
+.form-section select,
+.form-section textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 8px;
+  background: #2c2c2c;
+  color: #fff;
+  font-size: 15px;
+}
+.form-section input[type="file"] {
+  background: #1e1e1e;
+}
+.form-section button {
+  background-color: #f5a623;
+  color: #000;
+  padding: 12px 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.form-section button:hover {
+  background-color: #ffaa00;
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.6);
+}
+.summary-box {
+  flex: 1;
+  min-width: 220px;
+  background: #1b1b1b;
+  border-left: 6px solid #f5a623;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 165, 0, 0.2);
+  transition: transform 0.3s;
+}
+.summary-box h3 {
+  margin-bottom: 10px;
+  color: #f5a623;
+}
+.summary-box p {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0;
+}
+.summary-box:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.4);
+}
+/* ABOUT SECTION */
+#about {
+  background: linear-gradient(135deg, #1a1a1a, #222);
+  padding: 60px 20px;
+  text-align: center;
+}
+
+#about h2 {
+  font-size: 2rem;
+  color: #00ffd5;
+  margin-bottom: 20px;
+}
+
+#about p {
+  max-width: 900px;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 25px 30px;
+  border-left: 4px solid #ffaa00;
+  border-radius: 12px;
+  color: #ddd;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+#about p:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-3px);
+}
+
+/* CONTACT SECTION */
+#contact {
+  background: linear-gradient(135deg, #161616, #1e1e1e);
+  padding: 60px 20px;
+  text-align: center;
+}
+
+#contact h2 {
+  font-size: 2rem;
+  color: #ffaa00;
+  margin-bottom: 20px;
+}
+
+#contact form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+  margin: 30px auto 0;
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+}
+
+#contact input,
+#contact textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2a2a2a;
+  color: #fff;
+  font-size: 1rem;
+}
+
+#contact textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+#contact button {
+  background-color: #ffaa00;
+  color: #000;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+#contact button:hover {
+  background-color: #ffcc00;
+}
+footer {
+      background-color: #101010;
+      color: #ccc;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">FixItEDU - User</div>
+    <ul>
+      <li><a href="#about">About Us</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+      <li><a href="index.html">Logout</a></li>
+    </ul>
+  </nav>  <section class="dashboard-section welcome">
+    <h1>Welcome, <span id="username">User</span>!</h1>
+    <p>We're here to resolve your queries. Let's get started!</p>
+  </section>  
+  <section class="dashboard-section tips" data-aos="fade-right">
+    <h3>💡 Tips to Submit a Great Query</h3>
+    <ul>
+      <li>Be specific and detailed in your description.</li>
+      <li>Upload a relevant image or screenshot if possible.</li>
+      <li>Choose the correct category and domain.</li>
+    </ul>
+  </section>  <section class="dashboard-section"data-aos="flip-right" data-aos-delay="300" >
+    <h2 style="color: #ffaa00;">🚀 Quick Actions</h2>
+    <div class="dashboard-options">
+      <button onclick="openAcademicForm()">Raise Academic Query</button>
+      <button onclick="openNonAcademicForm()">Raise Non-Academic Query</button>
+      <button onclick="loadAllComplaints()">Track Query Status</button>
+    </div>
+  </section>  
+    <!-- 🔁 Add existing academic + non-academic forms + complaint list here as-is -->
+  <div id="academicComplaintForm" class="form-section"  >
+  <h3>Raise Academic Query</h3>
+  <form id="academicForm" >
+    <input type="text" id="regNoAcademic" placeholder="Register Number" required />
+    <select id="sectionAcademic" required>
+      <option value="">Select Section</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
+      <option value="D">D</option>
+    </select>
+    <select id="yearAcademic" required>
+      <option value="">Select Year</option>
+      <option value="1">1st Year</option>
+      <option value="2">2nd Year</option>
+      <option value="3">3rd Year</option>
+      <option value="4">4th Year</option>
+    </select>
+
+    <select id="academicDomain" required>
+      <option value="">Select Academic Domain</option>
+      <option value="Exam">Exam</option>
+      <option value="Attendance">Attendance</option>
+      <option value="Marksheet Issue">Marksheet Issue</option>
+      <option value="Faculty Related">Faculty Related</option>
+    </select>
+    <textarea id="academicDescription" placeholder="Describe your issue..." required></textarea>
+    <input type="file" id="academicImage" accept="image/*" />
+  <label for="faculty">Select Faculty</label>
+<select id="faculty" name="assignedFaculty">
+  <option value="">-- Select Faculty --</option>
+  <!-- Dynamically populate -->
+</select>
+
+    <button type="submit">Submit Academic Query</button>
+  </form>
+</div>
+
+<!-- Non-Academic Complaint Form -->
+<div id="nonAcademicComplaintForm" class="form-section">
+  <h3>Raise Non-Academic Query</h3>
+  <form id="nonAcademicForm">
+    <input type="text" id="regNoNonAcademic" placeholder="Register Number" required />
+    <select id="sectionNonAcademic" required>
+      <option value="">Select Section</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
+      <option value="D">D</option>
+    </select>
+    <select id="yearNonAcademic" required>
+      <option value="">Select Year</option>
+      <option value="1">1st Year</option>
+      <option value="2">2nd Year</option>
+      <option value="3">3rd Year</option>
+      <option value="4">4th Year</option>
+    </select>
+
+    <select id="nonAcademicDomain" required>
+      <option value="">Select Non-Academic Domain</option>
+      <option value="Hostel">Hostel</option>
+      <option value="WiFi">WiFi</option>
+      <option value="Canteen">Canteen</option>
+      <option value="Cleanliness">Cleanliness</option>
+      <option value="Other">Other</option>
+    </select>
+    <textarea id="nonAcademicDescription" placeholder="Describe your issue..." required></textarea>
+    <input type="file" id="nonAcademicImage" accept="image/*" />
+    <label for="faculty">Select Faculty</label>
+<select id="nonAcademicFaculty" name="facultyId" >
+  <option value="">-- Select Faculty --</option>
+  <!-- Dynamically populate -->
+</select>
+
+
+    <button type="submit">Submit Non-Academic Query</button>
+  </form>
+</div>
+
+    <section class='summary-section' style="margin: 40px auto; max-width: 90%; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;" data-aos="flip-down" data-aos-delay="300">
+  <div class="summary-box" id="totalComplaintsBox">
+    <h3>Total Complaints</h3>
+    <p id="totalCount">0</p>
+  </div>
+  <div class="summary-box" id="resolvedBox">
+    <h3>Resolved</h3>
+    <p id="resolvedCount">0</p>
+  </div>
+  <div class="summary-box" id="pendingBox">
+    <h3>Pending</h3>
+    <p id="pendingCount">0</p>
+  </div>
+
+  </section>
+
+  <ul id="complaintsList"></ul>
+  <section id="about" data-aos="zoom-in">
+    <h2>About Us</h2>
+    <p>
+      FixIt is a centralized complaint management portal designed to bridge the gap between students, employees, and administrators within any institution. With a user-friendly interface, real-time tracking, and role-based dashboards, the system ensures that every complaint is handled efficiently. Our goal is to provide transparency, faster resolution, and better communication through a digitized workflow.
+    </p>
+  </section>
+
+  <section id="contact" data-aos="flip-up">
+    <h2>Contact Us</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea rows="4" placeholder="Your Message" required></textarea>
+      <button class="btn" type="submit">Send Message</button>
+    </form>
+  </section>
+  <footer>Made with ❤️</footer>
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+  const userData = localStorage.getItem('user');
+  try {
+    const user = JSON.parse(userData);
+    if (user && user.username) {
+      document.getElementById('username').textContent = user.username;
+    }
+  } catch (e) {
+    console.warn("User data is invalid or missing");
+  }
+});
+ function openAcademicForm() {
+  const form = document.getElementById('academicComplaintForm');  // Get the element itself
+  form.style.display = 'block';  // Now apply the style
+  document.getElementById('nonAcademicComplaintForm').style.display = 'none';
+  form.scrollIntoView({ behavior: "smooth" }); // ✅ Smooth scroll
+}
+
+function openNonAcademicForm() {
+  const form = document.getElementById('nonAcademicComplaintForm');
+  form.style.display = 'block';
+  document.getElementById('academicComplaintForm').style.display = 'none';
+  form.scrollIntoView({ behavior: "smooth" }); // Optional: scroll to non-academic
+}
+
+
+  // 📩 Academic Form Submit
+  document.getElementById('academicForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('registerNumber', document.getElementById('regNoAcademic').value);
+    formData.append('section', document.getElementById('sectionAcademic').value);
+    formData.append('year', document.getElementById('yearAcademic').value);
+    formData.append('domain', document.getElementById('academicDomain').value);
+    formData.append('description', document.getElementById('academicDescription').value);
+    formData.append('assignedFaculty', document.getElementById('faculty').value);
+
+    if (document.getElementById('academicImage').files[0]) {
+      formData.append('image', document.getElementById('academicImage').files[0]);
+    }
+    const token=localStorage.getItem('userToken')
+    const res = await fetch('/api/complaints/academic', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData
+    });
+
+    const data = await res.json();
+    alert(data.message || 'Academic query submitted!');
+    document.getElementById('academicForm').reset();
+  });
+
+  // 🧹 Non-Academic Form Submit
+  document.getElementById('nonAcademicForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('registerNumber', document.getElementById('regNoNonAcademic').value);
+    formData.append('section', document.getElementById('sectionNonAcademic').value);
+    formData.append('year', document.getElementById('yearNonAcademic').value);
+    formData.append('domain', document.getElementById('nonAcademicDomain').value);
+    formData.append('description', document.getElementById('nonAcademicDescription').value);
+    formData.append('assignedFaculty', document.getElementById('faculty').value);
+
+    if (document.getElementById('nonAcademicImage').files[0]) {
+      formData.append('image', document.getElementById('nonAcademicImage').files[0]);
+    }
+    const token=localStorage.getItem('userToken')
+    const res = await fetch('/api/complaints/non-academic', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}` },
+      body: formData
+    });
+
+    const data = await res.json();
+    alert(data.message || 'Non-Academic query submitted!');
+    document.getElementById('nonAcademicForm').reset();
+  });
+  
+  async function fetchUserComplaints() {
+  const token = localStorage.getItem('userToken');
+  const list = document.getElementById('complaintsList');
+  list.innerHTML = '<li>Loading your complaints...</li>';
+
+  try {
+    const res = await fetch('https://fixit-backend-cccw.onrender.com/api/complaints/my-complaints', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const complaints = await res.json();
+    list.innerHTML = '';
+
+    if (!complaints.length) {
+      list.innerHTML = '<li>No complaints submitted yet.</li>';
+      return;
+    }
+
+    complaints.forEach(c => {
+      const li = document.createElement('li');
+
+      const statusColor = c.status === 'Resolved' ? 'lightgreen' : (c.status === 'Rejected' ? 'red' : 'orange');
+      console.log('complaint',c.category);
+      li.innerHTML = `
+        <div style="margin-bottom: 10px;">
+          <strong style="color: #00fff7;">${c.category || 'N/A'}</strong> | 
+          <span style="color: #ccc;">${c.domain || 'N/A'}</span><br/>
+          <em style="color: #aaa;">Description:</em> ${c.description || 'No description'}<br/>
+          <em style="color: #aaa;">Status:</em> 
+          <span style="color: ${statusColor}; font-weight: bold;">${c.status || 'Pending'}</span><br/>
+          ${c.response ? `<em style="color: #aaa;">Response:</em> ${c.response} `: ''}
+        </div>
+      `;
+
+      li.style.borderLeft = `5px solid ${statusColor}`;
+      li.style.background = '#1e1e1e';
+      li.style.padding = '10px 15px';
+      li.style.borderRadius = '6px';
+      li.style.marginBottom = '10px';
+
+      list.appendChild(li);
+    });
+    updateSummaryCounts(complaints);
+  } catch (err) {
+    console.error('Fetch failed:', err);
+    list.innerHTML = `<li style="color:red;">Error fetching complaints.</li>`;
+  }
+  
+}
+
+function updateSummaryCounts(complaints) {
+  const total = complaints.length;
+  const resolved = complaints.filter(c => c.status?.toLowerCase() === 'resolved').length;
+  const pending = complaints.filter(c => c.status?.toLowerCase() === 'pending').length;
+
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('resolvedCount').textContent = resolved;
+  document.getElementById('pendingCount').textContent = pending;
+}
+
+async function loadFaculty() {
+  try {
+    const res = await fetch('https://fixit-backend-cccw.onrender.com/api/employee/faculty-list', {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('userToken')}`
+      }
+    });
+
+    const faculty = await res.json();
+
+    if (!Array.isArray(faculty)) {
+      console.error('Faculty list response is not an array:', faculty);
+      alert('Failed to load faculty list. Please login again.');
+      return;
+    }
+
+    const facultySelect = document.getElementById('faculty');
+    facultySelect.innerHTML = '<option value="">-- Select Faculty --</option>';
+
+    faculty.forEach(f => {
+      const opt = document.createElement('option');
+      opt.value = f._id;
+      opt.textContent = `${f.username} (${f.professorType} - ${f.department})`;
+      facultySelect.appendChild(opt);
+    });
+
+  } catch (err) {
+    console.error('Could not load faculty list:', err);
+    alert('Failed to fetch faculty list.');
+  }
+}
+
+async function loadNonAcademicFaculty() {
+  try {
+    const res = await fetch('https://fixit-backend-cccw.onrender.com/api/employee/non-academic-faculty');
+    const facultyList = await res.json();
+
+    const facultyDropdown = document.getElementById('nonAcademicFaculty');
+    facultyDropdown.innerHTML = '<option value="">-- Select Faculty --</option>';
+
+    facultyList.forEach(faculty => {
+      const option = document.createElement('option');
+      option.value = faculty._id;
+      option.textContent = `${faculty.username} (${faculty.department})`;
+      facultyDropdown.appendChild(option);
+    });
+
+  } catch (err) {
+    console.error("Failed to load non-academic faculty:", err);
+  }
+}
+
+function loadAllComplaints() {
+  const complaintsSection = document.getElementById('complaintsList');
+  complaintsSection.scrollIntoView({ behavior: "smooth" }); // Scroll to section
+  fetchUserComplaints(); // Load the complaints
+}
+
+// Call this on page load
+window.onload = () => {
+  loadFaculty();
+  loadNonAcademicFaculty();
+  fetchUserComplaints();
+};
+
+  </script>
+</body>
+</html>

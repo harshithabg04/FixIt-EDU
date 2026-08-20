@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verify OTP</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(245, 166, 35, 0.2);
+      width: 350px;
+    }
+
+    h2 {
+      color: #f5a623;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background: #2c2c2c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #f5a623;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #121212;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: #d9971b;
+    }
+
+    p {
+      margin-top: 10px;
+      color: #aaa;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Verify OTP</h2>
+    <p id="emailDisplay"></p>
+    <input type="text" id="otpInput" placeholder="Enter OTP" />
+    <button id="verifyOtpBtn">Verify OTP & Complete Signup</button>
+    <p id="resendBlock" style="margin-top: 10px; color: #aaa;">
+  Didn’t receive the OTP? 
+  <button id="resendBtn" style="background: none; border: none; color: #f5a623; cursor: pointer; text-decoration: underline;" disabled>Resend in <span id="timer">30</span>s</button>
+</p>
+
+  </div>
+
+  <script>
+    const emailDisplay = document.getElementById('emailDisplay');
+    const otpInput = document.getElementById('otpInput');
+    const verifyBtn = document.getElementById('verifyOtpBtn');
+
+    const formData = JSON.parse(sessionStorage.getItem('signupForm') || '{}');
+    const email = formData.email;
+
+    if (!email) {
+      alert('No email found. Please sign up again.');
+      window.location.href = '/employeesignup.html';
+    }
+
+    emailDisplay.innerText = `Email: ${email}`;
+verifyBtn.addEventListener('click', async () => {
+  const otp = otpInput.value.trim();
+  if (!otp) return alert('Enter OTP');
+
+  const formData = JSON.parse(sessionStorage.getItem('signupForm') || '{}');
+  const email = formData.email;
+
+console.log("Sending OTP verify:", { email, otp });
+
+  // OTP VERIFY
+  const res = await fetch('/api/employee/verify-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, otp })
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    alert(result.message || 'OTP verification failed');
+    return;
+  }
+
+  // Convert base64 file back
+  const base64Proof = formData.collegeIdCard;
+  const byteString = atob(base64Proof.split(',')[1]);
+  const mimeString = base64Proof.split(',')[0].split(':')[1].split(';')[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  const file = new File([ab], "college_id_card", { type: mimeString });
+
+  // Prepare final form for signup
+  const finalForm = new FormData();
+  for (const key in formData) {
+    if (key !== 'collegeIdCard') {
+      finalForm.append(key, formData[key]);
+    }
+  }
+  finalForm.append('collegeIdCard', file);
+
+  // Submit form
+  const submitRes = await fetch('/api/employee/signup', {
+    method: 'POST',
+    body: finalForm
+  });
+
+  const submitData = await submitRes.json();
+  alert(submitData.message);
+
+  if (submitRes.ok) {
+    sessionStorage.clear();
+    alert('Signup successful. Waiting for admin approval.');
+    window.location.href = '/index.html';
+  }
+});
+
+let countdownInterval = null;
+
+// Start timer countdown function
+function startResendCountdown(timerEl, duration = 30) {
+  let timeLeft = duration;
+  resendBtn.disabled = true;
+  timerEl.textContent = timeLeft;
+
+  // Clear any existing countdown
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+  }
+
+  countdownInterval = setInterval(() => {
+    timeLeft--;
+    timerEl.textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(countdownInterval);
+      resendBtn.disabled = false;
+      resendBtn.innerHTML = 'Resend OTP';
+    }
+  }, 1000);
+}
+
+// Initial timer on page load
+const initialTimerSpan = document.getElementById('timer');
+if (initialTimerSpan) {
+  startResendCountdown(initialTimerSpan);
+}
+
+// Resend OTP logic
+resendBtn.addEventListener('click', async () => {
+  const formData = JSON.parse(sessionStorage.getItem('signupForm') || '{}');
+  const email = formData.email;
+
+  if (!email) {
+    alert('Email not found. Please go back and fill the form again.');
+    return;
+  }
+
+  resendBtn.disabled = true;
+  resendBtn.innerHTML = 'Resending...';
+
+  try {
+    const res = await fetch('/api/employee/request-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+
+    const result = await res.json();
+    if (res.ok) {
+      alert('OTP resent to your email.');
+
+      // Update button with new timer span
+      resendBtn.innerHTML = 'Resend in <span id="timer">30</span>s';
+
+      // Wait a moment for DOM to update, then get the new timer span
+      setTimeout(() => {
+        const newTimerSpan = document.getElementById('timer');
+        if (newTimerSpan) {
+          startResendCountdown(newTimerSpan);
+        }
+      }, 0);
+
+    } else {
+      alert(result.message || 'Failed to resend OTP.');
+      resendBtn.disabled = false;
+      resendBtn.innerHTML = 'Resend OTP';
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Error while resending OTP');
+    resendBtn.disabled = false;
+    resendBtn.innerHTML = 'Resend OTP';
+  }
+});
+
+  </script>
+</body>
+</html>

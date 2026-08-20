@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Signup</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #121212;
+      font-family: 'Poppins', sans-serif;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: #1e1e1e;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 24px;
+      font-weight: 700;
+      color: #f5a623;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: none;
+      background: #2a2a2a;
+      color: #e0e0e0;
+      font-size: 16px;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input::placeholder {
+      color: #888;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      background: #3a3a3a;
+      outline: none;
+      box-shadow: 0 0 8px #f5a623;
+    }
+
+    button {
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      background: #f5a623;
+      color: #121212;
+      font-weight: 600;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #d9971b;
+    }
+
+    p.message {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    p.message a {
+      color: #f5a623;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    p.message a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Create Account</h2>
+    <form id="signupForm">
+      <input type="text" id="username" name="username" placeholder="Username" required />
+      <small style="color: #f5a623; font-size: 13px; margin-top: -10px;">
+    * Please provide your real email. It will be used later for notifications.To get OTP
+  </small>
+  <input type="email" id="email" name="email" placeholder="Email (Use a valid one!)" required />
+  <small style="color: #f5a623; font-size: 13px; margin-top: -10px;">
+    * Please add +91 also before entering your number.To get OTP for verification
+  </small>
+  <input type="text" id="phone" name="phone" placeholder="Phone Number" required />
+  <input type="password" id="password" name="password" placeholder="Password" required />
+  
+      <label for="department">Select Department</label>
+<select id="department" name="department" required>
+  <option value="">Select Department</option>
+  <option value="CSE">CSE</option>
+  <option value="IT">IT</option>
+  <option value="AIML">AIML</option>
+  <option value="AIDS">AIDS</option>
+  <option value="CSBS">CSBS</option>
+  <option value="ECE">ECE</option>
+  <option value="MECH">MECH</option>
+  <option value="CIVIL">CIVIL</option>
+  <option value="EEE">EEE</option>
+</select>
+      <button type="submit">Get OTP</button>
+    </form>
+    <p class="message">
+      Already have an account? <a href="login.html">Log In</a>
+    </p>
+  </div>
+
+<script>
+  const form = document.getElementById("signupForm");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      username: document.getElementById("username").value,
+      phone: document.getElementById("phone").value,
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+      department: document.getElementById("department").value
+    };
+
+    try {
+      const res = await fetch("/api/user/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        sessionStorage.setItem("phone", data.phone);
+        alert(result.message || "OTP sent! Please verify.");
+        window.location.href = "verify-otp.html";
+      } else {
+        alert(result.message || "Signup failed.");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Error during signup.");
+    }
+
+  });   <!-- 🔥 THIS WAS MISSING -->
+</script>
+
+</body>
+</html>

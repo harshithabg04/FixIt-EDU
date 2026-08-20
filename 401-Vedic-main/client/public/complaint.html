@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Complaint</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      background: #0f0f0f;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    form {
+      background: #1e1e1e;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 300px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 15px;
+      width: 100%;
+      padding: 10px;
+      background: teal;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <form id="complaintForm" enctype="multipart/form-data">
+  <h2>Submit Complaint</h2>
+  <input type="text" id="title" name="title" placeholder="Title" required />
+<textarea id="description" name="description" placeholder="Description" required></textarea>
+<input type="text" id="location" name="location" placeholder="Location" required />
+<input type="text" id="userName" name="userName" placeholder="Your Name" required />
+<input type="email" id="userEmail" name="userEmail" placeholder="Your Email" required />
+<select id="domain" name="domain" required>
+    <option value="" disabled selected>Select Domain</option>
+    <option value="Electrical">Electrical</option>
+    <option value="Plumbing">Plumbing</option>
+    <option value="Carpentry">Carpentry</option>
+  </select>
+  <input type="file" id="photo" name="photo" />
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const complaintForm = document.getElementById('complaintForm');
+
+  complaintForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('userToken');
+    console.log("Token being sent:", token); // Ensure user is logged in and token is stored here
+
+    if (!token) {
+      alert('Please log in before submitting a complaint.');
+      return;
+    }
+
+    const formData = new FormData(complaintForm);
+
+    try {
+      const response = await fetch('/api/complaints', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert('Error: ' + errorData.message);
+        return;
+      }
+
+      const data = await response.json();
+      alert('Complaint submitted successfully!');
+      complaintForm.reset();
+    } catch (err) {
+      console.error('Network error:', err);
+      alert('Network error. Please try again.');
+    }
+  });
+</script>
+
+</body>
+</html>

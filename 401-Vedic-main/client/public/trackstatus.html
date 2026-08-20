@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Track Complaint</title>
+  <style>
+    body {
+      background-color: #121212;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .track-box {
+      background-color: #1f1f1f;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+      width: 350px;
+      text-align: center;
+    }
+    .track-box h2 {
+      margin-bottom: 20px;
+    }
+    .track-box input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+    }
+    .track-box button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .track-box button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="track-box">
+    <h2>Track Your Complaint</h2>
+    <input type="email" placeholder="Enter your email" required />
+    <button>Track</button>
+  </div>
+</body>
+<script>
+document.querySelector('button').addEventListener('click', async () => {
+  const email = document.querySelector('input').value;
+
+  const res = await fetch(`/api/complaints/user/${email}`);
+  const data = await res.json();
+
+  if (res.ok) {
+    console.log(data);
+    alert('Check console for status'); // You can dynamically render it too
+  } else {
+    alert(data.message || 'Tracking failed');
+  }
+});
+</script>
+
+</html>

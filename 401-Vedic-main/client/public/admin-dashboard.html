@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
+    rel="stylesheet"
+  />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+footer {
+      background-color: #101010;
+      color: #ccc;
+      text-align: center;
+      padding: 20px;
+    }
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: #eee;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(90deg, #1f1f1f, #3a3a3a);
+      padding: 1rem 2rem;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #4fc3f7;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+      text-align: center;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    h2 {
+      color: #81d4fa;
+      margin-bottom: 1rem;
+    }
+
+    .analytics {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      flex: 1 1 250px;
+      background: #1e1e1e;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #4fc3f7aa;
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #4fc3f7ff;
+    }
+
+    .card h3 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: #29b6f6;
+    }
+
+    .card p {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      color: #90caf9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px #4fc3f7aa;
+    }
+
+    thead {
+      background: #0288d1;
+    }
+
+    th,
+    td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+      color: #e1f5fe;
+      vertical-align: middle;
+    }
+
+    th {
+      font-weight: 600;
+      user-select: none;
+    }
+
+    tbody tr:hover {
+      background: #0288d1aa;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    tbody {
+      display: block;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    thead,
+    tbody tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+    table {
+  table-layout: fixed; /* Ensures fixed layout */
+  width: 100%;
+}
+
+thead th:nth-child(1), tbody td:nth-child(1) { width: 150px; } /* Username */
+thead th:nth-child(2), tbody td:nth-child(2) { width: 200px; } /* Email */
+thead th:nth-child(3), tbody td:nth-child(3) { width: 100px; } /* Department */
+thead th:nth-child(4), tbody td:nth-child(4) { width: 150px; } /* Professor Type */
+thead th:nth-child(5), tbody td:nth-child() { width: 0px; } /* Actions */
+
+/* Ensure content wraps and aligns */
+td, th {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-align: left;
+}
+
+
+/* Adjust buttons */
+/* Action Buttons Container */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px; /* spacing between buttons */
+}
+
+/* Shared button styles */
+button.approve,
+button.reject {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.3s ease;
+}
+
+/* Approve Button Style */
+button.approve {
+  background-color: #4caf50;
+}
+
+button.approve:hover {
+  background-color: #388e3c;
+}
+
+/* Reject Button Style */
+button.reject {
+  background-color: #e53935;
+}
+
+button.reject:hover {
+  background-color: #b71c1c;
+}
+
+    a.govt-id-link {
+      color: #4fc3f7;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .summary-box{
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .cad {
+      flex: 1 1 250px;
+      background: #1e1e1e;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #4fc3f7aa;
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .cad:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px #4fc3f7ff;
+    }
+
+    .cad h3 {
+      font-size: 2.5rem;
+      margin: 0;
+      color: #29b6f6;
+    }
+
+    .cad p {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      color: #90caf9;
+    }
+
+    /* Loader styles */
+    #loader {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #4fc3f7;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 3rem auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .analytics {
+        flex-direction: column;
+      }
+      tbody {
+        max-height: 250px;
+      }
+    }
+    .logout-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #e53935;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #c62828;
+}
+
+
+  </style>
+</head>
+<body>
+  <header data-aos="fade-down">
+  <button id="logoutBtn" class="logout-btn">Logout</button>
+  Admin Dashboard
+</header>
+
+  <main>
+    <section class="analytics" data-aos="fade-right">
+      <div class="card">
+        <h3 id="total-complaints">0</h3>
+        <p>Total Complaints</p>
+      </div>
+      <div class="card">
+        <h3 id="pending-employees">0</h3>
+        <p>Pending Employee Approvals</p>
+      </div>
+      <div class="card">
+        <h3 id="approved-employees">0</h3>
+        <p>Approved Employees</p>
+      </div>
+    </section>
+
+    <section data-aos="fade-left">
+      <h2>Pending Employee Requests</h2>
+      <div id="loader"></div>
+      <table style="display:none;" id="employee-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Profesor Type</th>
+            <th>collegeIdCard</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="employee-requests">
+          <!-- Employee rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+    </section>
+    <h2>Complaint Analytics</h2>
+    <section class="summary-box">
+      
+    <div class="cad" id="adminPendingBox">
+  <p>Pending</p>
+  <h3 id="adminPendingCount">0</h3>
+</div>
+<div class="cad" id="adminInProgressBox">
+  <p>In Progress</p>
+  <h3 id="adminInProgressCount">0</h3>
+</div>
+<div class="cad" id="adminResolvedBox">
+  <p>Resolved</p>
+  <h3 id="adminResolvedCount">0</h3>
+ </div>
+ </section>
+</main>
+<header>
+    <footer>Made with ❤️</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+ <script>
+  AOS.init({
+    duration: 800,
+    once: true
+  });
+
+  const API_BASE = 'https://fixit-backend-cccw.onrender.com/api';
+  const token = localStorage.getItem('adminToken');
+  console.log('Admin Token:',token);
+  const employeeTable = document.getElementById('employee-table');
+  const employeeRequestsTbody = document.getElementById('employee-requests');
+  const loader = document.getElementById('loader');
+  const totalComplaintsEl = document.getElementById('total-complaints');
+  const pendingEmployeesEl = document.getElementById('pending-employees');
+  const approvedEmployeesEl = document.getElementById('approved-employees');
+
+  // Fetch pending employees
+  async function fetchPendingEmployees() {
+    try {
+      const res = await fetch(`${API_BASE}/admin/employees/pending`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) throw new Error('Failed to fetch pending employees');
+      return await res.json();
+    } catch (err) {
+      console.error(err);
+      alert('Error fetching pending employees.');
+      return [];
+    }
+  }
+
+  // Fetch analytics (total complaints, pending/approved employee stats)
+ // Fetch analytics (total complaints, pending/approved employee stats)
+async function fetchAnalytics() {
+  try {
+    const statsRes = await fetch(`${API_BASE}/admin/employees/stats`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const complaintRes = await fetch(`${API_BASE}/complaints/status-summary`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    const statsData = statsRes.ok ? await statsRes.json() : {};
+    const complaintData = complaintRes.ok ? await complaintRes.json() : {};
+
+    totalComplaintsEl.textContent = statsData.totalComplaints ?? 0;
+    pendingEmployeesEl.textContent = statsData.pending ?? 0;
+    approvedEmployeesEl.textContent = statsData.approved ?? 0;
+
+    document.getElementById('adminPendingCount').textContent = complaintData.pending ?? 0;
+document.getElementById('adminInProgressCount').textContent = complaintData.inProgress ?? 0;
+document.getElementById('adminResolvedCount').textContent = complaintData.resolved ?? 0;
+
+
+  } catch (err) {
+    console.error('Error fetching analytics:', err);
+  }
+}
+  // Approve employee
+  async function approveEmployee(id) {
+    if (!confirm('Approve this employee?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/admin/employees/${id}/approve`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) throw new Error('Approval failed');
+      alert('Employee approved!');
+      await loadDashboard();
+    } catch (err) {
+      alert('Error approving employee');
+      console.error(err);
+    }
+  }
+
+  // Reject employee
+  async function rejectEmployee(id) {
+    if (!confirm('Reject this employee?')) return;
+    try {
+      const res = await fetch(`${API_BASE}/admin/employees/${id}/reject`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!res.ok) throw new Error('Rejection failed');
+      alert('Employee rejected!');
+      await loadDashboard();
+    } catch (err) {
+      alert('Error rejecting employee');
+      console.error(err);
+    }
+  }
+
+  // Render employees table
+  // Render only pending employees
+async function renderEmployees(employees = []) {
+  employeeRequestsTbody.innerHTML = ''; // Clear existing rows
+
+  if (employees.length === 0) {
+    employeeRequestsTbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No pending requests</td></tr>`;
+    return;
+  }
+
+  employees.forEach(emp => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${emp.username}</td>
+      <td>${emp.email}</td>
+      <td>${emp.department}</td>
+      <td>${emp.professorType}</td>
+      <td><a href="/uploads/${emp.collegeIdCardUrl}" target="_blank" class="govt-id-link">View</a></td>
+          <td>
+
+      <td>
+        <button onclick="approveEmployee('${emp._id}')" class="approve">Approve</button>
+          <button onclick="rejectEmployee('${emp._id}')" class="reject">Reject</button>
+        </td>
+
+    `;
+    employeeRequestsTbody.appendChild(tr);
+  });
+}
+  // Load the dashboard
+  async function loadDashboard() {
+    loader.style.display = 'block';
+    employeeTable.style.display = 'none';
+
+    const employees = await fetchPendingEmployees();
+    renderEmployees(employees);
+    await fetchAnalytics();
+
+    loader.style.display = 'none';
+    employeeTable.style.display = 'table';
+  }
+
+  // Initial dashboard load
+  loadDashboard();
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    localStorage.removeItem('token'); // For employee dashboard
+    localStorage.removeItem('adminToken'); // In case it's admin dashboard
+    window.location.href = 'index.html';
+  });
+</script>
+
+
+</body>
+</html>

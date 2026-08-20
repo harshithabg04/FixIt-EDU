@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Dashboard | Fixit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #121212;
+      color: #e0e0e0;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      font-size: 2rem;
+      color: #4ff75d;
+      margin-bottom: 2rem;
+    }
+
+    .profile {
+      background: #1e1e1e;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 10px #4ff75d;
+    }
+
+    .profile h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #4ff75d;
+    }
+
+    .cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      flex: 1 1 200px;
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 1.2rem;
+      box-shadow: 0 0 10px #65f74f44;
+      transition: transform 0.3s ease;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #f74f4faa;
+    }
+
+    .card h3 {
+      font-size: 2rem;
+      color: #f62929;
+    }
+
+    .card p {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color:#4ff75d;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #1e1e1e;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 15px #4fc5f7aa;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #121b0b;
+      color: #e1f5fe;
+    }
+
+    td {
+      color: #e0f7fa;
+    }
+
+    .status-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .in-progress {
+      background-color: #fbc02d;
+      color: #000;
+    }
+
+    .resolved {
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+    .status-btn:hover {
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      .cards {
+        flex-direction: column;
+      }
+
+      table, th, td {
+        font-size: 0.9rem;
+      }
+    }
+    .badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  text-transform: capitalize;
+}
+.badge.pending { background: orange; }
+.badge.in-progress { background: royalblue; }
+.badge.resolved { background: green; }
+
+  </style>
+</head>
+<body>
+  <header>Employee Non-Academic Dashboard</header>
+
+  <section class="profile">
+    <h2>Welcome, <span id="empName">Employee</span></h2>
+    <p>Department: <span id="empDept">Loading...</span></p>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <h3 id="total">0</h3>
+      <p>Total Complaints</p>
+    </div>
+    <div class="card">
+      <h3 id="inProgress">0</h3>
+      <p>In Progress</p>
+    </div>
+    <div class="card">
+      <h3 id="resolved">0</h3>
+      <p>Resolved</p>
+    </div>
+  </section>
+
+  
+  <h2 style="color: orange;">Pending Complaints</h2>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Complaint</th><th>Status</th><th>Update</th></tr>
+    </thead>
+    <tbody id="pendingTable"></tbody>
+  </table>
+
+  <h2 style="color: rgb(225, 92, 65);">In Progress Complaints</h2>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Complaint</th><th>Status</th><th>Update</th></tr>
+    </thead>
+    <tbody id="inProgressTable"></tbody>
+  </table>
+
+  <h2 style="color: green;">Resolved Complaints</h2>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Complaint</th><th>Status</th><th>Update</th></tr>
+    </thead>
+    <tbody id="resolvedTable"></tbody>
+  </table>
+
+
+</section>
+
+
+  <script>
+  const token = localStorage.getItem('token'); // token for non-academic employee
+  const API = 'https://fixit-backend-cccw.onrender.com/api';
+
+  async function loadNonAcademicComplaints() {
+    try {
+      const res = await fetch(`${API}/employee/non-academic-complaints`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const complaints = await res.json();
+      populateNonAcademicTable(complaints);
+    } catch (err) {
+      console.error('Error loading non-academic complaints:', err);
+    }
+  }
+
+  function populateNonAcademicTable(complaints) {
+    const pendingTable = document.getElementById("pendingTable");
+    const inProgressTable = document.getElementById("inProgressTable");
+    const resolvedTable = document.getElementById("resolvedTable");
+
+    pendingTable.innerHTML = "";
+    inProgressTable.innerHTML = "";
+    resolvedTable.innerHTML = "";
+
+    complaints.forEach(c => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${c.registerNumber || 'N/A'}</td>
+        <td>${c.domain}<br><small>${c.description}</small></td>
+        <td><span class="badge ${c.status}">${c.status}</span></td>
+        <td>
+          <button class="status-btn in-progress" onclick="updateStatus('${c._id}', 'in-progress')">In Progress</button>
+          <button class="status-btn resolved" onclick="updateStatus('${c._id}', 'resolved')">Resolved</button>
+        </td>
+      `;
+
+      if (c.status === 'pending') {
+        pendingTable.appendChild(tr);
+      } else if (c.status === 'in-progress') {
+        inProgressTable.appendChild(tr);
+      } else if (c.status === 'resolved') {
+        resolvedTable.appendChild(tr);
+      }
+    });
+
+    // Update summary cards
+    document.getElementById('total').textContent = complaints.length;
+    document.getElementById('inProgress').textContent = complaints.filter(c => c.status === 'in-progress').length;
+    document.getElementById('resolved').textContent = complaints.filter(c => c.status === 'resolved').length;
+  }
+  async function loadEmployeeProfile() {
+  try {
+    const res = await fetch(`${API}/employee/profile`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    const data = await res.json();
+    document.getElementById('empName').textContent = data.username;
+    document.getElementById('empDept').textContent = data.department;
+  } catch (err) {
+    console.error("Failed to load profile:", err);
+  }
+}
+  async function updateStatus(id, status) {
+    try {
+      const res = await fetch(`http://localhost:5000/api/employee/update-status/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status })
+      });
+
+      if (!res.ok) throw new Error('Failed to update status');
+
+      const data = await res.json();
+      alert(`Status updated to ${status}`);
+      loadNonAcademicComplaints();
+    } catch (err) {
+      console.error('Error updating status:', err);
+      alert('Could not update complaint status');
+    }
+  }
+  // Call on load
+  window.onload = () => {
+    loadEmployeeProfile();
+    loadNonAcademicComplaints();
+  };
+</script>
+</body>
+</html>
